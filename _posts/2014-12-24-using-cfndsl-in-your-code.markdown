@@ -27,7 +27,7 @@ json = CfnDsl::eval_file_with_extras(
   filename,
   [[:ruby, "vars.rb"]],
   STDERR
-)
+).to_json
 {% endhighlight %}
 
 What about those two mysterious parameters ```[[:ruby, "vars.rb"]]```
