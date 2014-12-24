@@ -1,0 +1,19 @@
+# Site settings
+title: Bits and pieces
+email: kbourn@gmail.com
+description: "Notes on software development"
+highlighter: pygments
+baseurl: "/"
+encoding: "utf-8"
+url: "http://bkon.github.io"
+twitter_username: bkonst
+github_username: bkon
+disqus_username: konstantinburnaev
+isso_domain: false
+
+defaults:
+  -
+    scope:
+      path: ""
+    values:
+      layout: "default"
