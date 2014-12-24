@@ -15,13 +15,19 @@ make it more friendly to the developers and tester's eye?
 And the answer is, obviously, "yes, we can!"
 
 {% highlight ruby %}
-json = CfnDsl::eval_file_with_extras(filename).to_json
+json = CfnDsl::eval_file_with_extras(
+  filename
+).to_json
 {% endhighlight %}
 
 Too simple? Ok, if you want a bit more complicated code:
 
 {% highlight ruby %}
-json = CfnDsl::eval_file_with_extras filename, [[:ruby, "vars.rb"]], STDERR
+json = CfnDsl::eval_file_with_extras(
+  filename,
+  [[:ruby, "vars.rb"]],
+  STDERR
+)
 {% endhighlight %}
 
 What about those two mysterious parameters ```[[:ruby, "vars.rb"]]```
