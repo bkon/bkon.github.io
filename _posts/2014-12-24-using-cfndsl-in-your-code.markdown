@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Generate CloudFormation JSON with cfndl from your code
+title: Generate CloudFormation JSON with cfndsl from your code
 categories: development
 tags: aws devops ruby cloudformation
 ---
@@ -14,15 +14,15 @@ make it more friendly to the developers and tester's eye?
 
 And the answer is, obviously, "yes, we can!"
 
-```ruby
+{% highlight ruby %}
 json = CfnDsl::eval_file_with_extras(filename).to_json
-```
+{% endhighlight %}
 
 Too simple? Ok, if you want a bit more complicated code:
 
-```ruby
+{% highlight ruby %}
 json = CfnDsl::eval_file_with_extras filename, [[:ruby, "vars.rb"]], STDERR
-```
+{% endhighlight %}
 
 What about those two mysterious parameters ```[[:ruby, "vars.rb"]]```
 and ```STDERR```?
@@ -38,10 +38,10 @@ Now, that tells us how to generate the JSON contents using an external
 file.  What if you just want to embed the template to your source code
 directly for whatever reason?  Fear not - it makes things even easier!
 
-```ruby
+{% highlight ruby %}
 CloudFormation do
   ... your stack contents ...
 end.to_json
-```
+{% endhighlight %}
 
 Good luck with your stacks!
