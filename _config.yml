@@ -1,15 +1,21 @@
 # Site settings
 title: Bits and pieces
 email: kbourn@gmail.com
-description: "Notes on software development"
+description: "Misc notes"
 highlighter: pygments
+markdown: redcarpet
 baseurl: "/"
 encoding: "utf-8"
 url: "http://bkon.github.io"
 twitter_username: bkonst
 github_username: bkon
 disqus_username: bkongithub
+linkedin_username: konstantin-burnaev
 isso_domain: false
+paginate: 5
+
+# Permalinks
+permalink:        pretty
 
 defaults:
   -

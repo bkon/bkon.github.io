@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: Generate CloudFormation JSON with cfndsl from your code
 categories: development
 tags: aws devops ruby cloudformation
