@@ -1,0 +1,13 @@
+{
+  "name": "bkon.github.io",
+  "dependencies": {
+    "ramda": "registry:npm/ramda#0.21.0+20160531162943"
+  },
+  "globalDependencies": {
+    "react": "registry:dt/react#0.14.0+20161203201537",
+    "react-dom": "registry:dt/react-dom#0.14.0+20160412154040",
+    "react-onclickoutside": "registry:dt/react-onclickoutside#5.7.0+20161025104157",
+    "recompose": "registry:dt/recompose#0.20.2+20160930120758",
+    "require": "registry:dt/require#2.1.20+20160919185614"
+  }
+}

@@ -1,0 +1,85 @@
+$white: #ffffff;
+$black: #000000;
+$gray-background: #f7f7f7;
+$gray-border: #ddeeee;
+
+$animation-scale: 1;
+
+$short-duration-mobile: 195ms * $animation-scale;
+$medium-duration-mobile: 225ms * $animation-scale;
+$long-duration-mobile: 375ms * $animation-scale;
+
+$short-duration-desktop: 150ms * $animation-scale;
+$medium-duration-desktop: 160ms * $animation-scale;
+$long-duration-desktop: 200ms * $animation-scale;
+$effect-duration-desktop: 1s * $animation-scale;
+
+$standard-curve: cubic-bezier(0.4, 0, 0.2, 1);
+$deceleration-curve: cubic-bezier(0, 0, 0.2, 1);
+$acceleration-curve: cubic-bezier(0.4, 0, 1, 1);
+$sharp-curve: cubic-bezier(0.4, 0, 0.6, 1);
+
+$default-shadow: 0 2px 4px 0 rgba($black, 0.3);
+
+$gutter: 20px;
+
+.button {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.menu {
+
+}
+
+.container {
+  display: inline-block;
+  cursor: pointer;
+  overflow: hidden;
+  border: solid 1px $gray-border;
+  text-align: center;
+  transition: box-shadow $short-duration-desktop $standard-curve,
+              height $short-duration-desktop $standard-curve,
+              width $short-duration-desktop $standard-curve,
+              background $short-duration-desktop $standard-curve;
+
+  &:hover {
+    background: $gray-background;
+  }
+}
+
+.containerOpen {
+  @extend .container;
+  background: $gray-background;
+  box-shadow: $default-shadow;
+}
+
+.buttonContainer {
+  display: inline-block;
+  text-align: center;
+  padding: $gutter;
+}
+
+.menuContainer {
+  display: inline-block;
+  padding: 0;
+  text-align: left;
+}
+
+.positionContainer {
+  position: relative;
+  height: 140px;
+}
+
+.positionWrapper {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.menuItem {
+  padding: $gutter;
+  text-align: left;
+  border-top: solid 1px $gray-border;
+  white-space: nowrap;
+}

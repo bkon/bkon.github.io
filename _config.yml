@@ -1,4 +1,5 @@
 # Site settings
+source: src
 title: Bits and pieces
 email: kbourn@gmail.com
 description: "Misc notes"
@@ -13,6 +14,9 @@ disqus_username: bkongithub
 linkedin_username: konstantin-burnaev
 isso_domain: false
 paginate: 5
+exclude:
+  - sass
+  - jsx
 
 # Permalinks
 permalink:        pretty
