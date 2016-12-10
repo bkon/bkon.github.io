@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "jsx": "preserve",
+    "module": "commonjs",
+    "noImplicitAny": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
