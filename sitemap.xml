@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>http://bkon.github.io//client/2016/12/01/using-refs-in-react/</loc>
+    <lastmod>2016-12-01T00:00:00+11:00</lastmod>
+  </url>
+  <url>
+    <loc>http://bkon.github.io//infrastructure/2014/12/24/using-cfndsl-in-your-code/</loc>
+    <lastmod>2014-12-24T00:00:00+11:00</lastmod>
+  </url>
+  <url>
+    <loc>http://bkon.github.io//</loc>
+  </url>
+</urlset>
