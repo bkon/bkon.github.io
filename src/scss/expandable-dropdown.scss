@@ -1,7 +1,9 @@
 $white: #ffffff;
 $black: #000000;
 $gray-background: #f7f7f7;
-$gray-border: #ddeeee;
+$gray-border: #e0e0e0;
+
+$border-radius: 3px;
 
 $animation-scale: 1;
 
@@ -28,12 +30,9 @@ $gutter: 20px;
   white-space: nowrap;
 }
 
-.menu {
-
-}
-
 .container {
   display: inline-block;
+  border-radius: $border-radius;
   cursor: pointer;
   overflow: hidden;
   border: solid 1px $gray-border;

@@ -15,11 +15,11 @@ js:
 
 * I want a reusable React component which works like an expandable menu button following the
 [Google material design guidelines](https://material.google.com/motion/material-motion.html#material-motion-what-makes-a-good-transition)
-* this component should be flexible enough to allow arbitrary content
-to de displayed inside the button and menu area.
-* container size is not known beforehand, as the length of the
-button text and menu context may vary, so straightforward approach
-using CSS animations does not work.
+* This component should be flexible enough to allow arbitrary content
+to be displayed inside the button and menu area.
+* The container size is not known beforehand, as the length of the
+button text and the height of the menu content may vary, so
+straightforward approach using CSS animations does not work.
 * [react-css-transition-replace](https://github.com/marnusw/react-css-transition-replace)
 cannot be used, as it does not handle container width changes.
 
@@ -31,14 +31,14 @@ cannot be used, as it does not handle container width changes.
 ## Solution
 
 In order to use CSS transitions, we need to have fixed values for
-container width and height in both states: opened and closed.  "Pure"
+container width and height in both opened and closed states. Pure
 React is not helpful in this case, as it knows nothing about the
 element sizes, but one thing we can do is to get a reference to the
 DOM node after an element has been mounted and access its `clientWidth`
 and `clientHeight` properties.
 
 Let's assume we got these references saved to `_button` and `_menu`
-instance attributes of out components. In this case, getting these CSS
+instance attributes of our component. In this case, getting these CSS
 values is as simple as having this method in your component
 definition:
 
@@ -66,9 +66,10 @@ containerStyle(): CSSProperties {
 }
 {% endhighlight %}
 
-Note the extra condition at lines 4-6. We're going to use these styles
-in the `render` method, and this means that it may be called when the
-component is not mounted yet, so refs won't be available.
+*Note the extra condition at lines 6-8. We're going to use these styles
+inside the `render` method and this means that this code may be
+executed when the component is not mounted yet, so refs won't be
+available.*
 
 Next step: let's use HOC to satisfy the "can render arbitrary content"
 requirement.
@@ -84,7 +85,7 @@ fully isolated from each other.
 
 {% highlight javascript linenos %}
 const Button: React.StatelessComponent<{}> = R.always(
-  <div className={ styles.button }>Click Me!</div>
+  <div className={ styles.button }>Click me!</div>
 );
 
 const Menu: React.StatelessComponent<{}> = R.always(
@@ -145,17 +146,23 @@ function genericDropdown<Props>(
 {% endhighlight %}
 
 *I've used [css-modules](https://github.com/css-modules/css-modules)
-here. It is not a requirement, normal strings as CSS classe names
-would do, but I do want my CS classes to be unique to reduce blog
-maintenance in future*
+here. It is not a requirement; normal CSS class names would work, but
+I do want my CS classes to be unique to reduce blog maintenance in
+future.*
 
-It looks simple, but... doesn't work yet. If we add some debug logging
-to the `render` method and `ref` helper, we would see that `render` is
-called first, and only after that we get two calls to `ref`. The
-obvious reason is React requires the component to be rendered to the
-virtual dom before it is mounted to the actual document.
+It looks simple, but... doesn't work yet. If we check DOM contents in
+developer tools, we'd see that styles on the container `div` are not
+being set.
 
-If only we could force the update after the component is mounted...
+Time to add some logging to the `render` method and `ref`
+helper. After re-running the example the console shows that `render`
+is called before `ref`, leaving us with no DOM references. The obvious
+cause is React requires the component to be rendered to the virtual
+dom before it is mounted to the actual document, and there were no
+changes in `props` or `state` which would cause React to re-render our
+component after that.
+
+If only we could force the update *after* the component is mounted&hellip;
 
 {% highlight javascript linenos %}
 componentDidMount(): void {
@@ -163,7 +170,7 @@ componentDidMount(): void {
 }
 {% endhighlight %}
 
-... and yes we can.
+&hellip;which is in fact quite easy to do.
 
 Now the only remaining part is to
 [add some nice styling and actual CSS transitions](https://github.com/bkon/bkon.github.io/blob/source/src/scss/expandable-dropdown.scss)

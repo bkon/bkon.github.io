@@ -35,7 +35,7 @@ interface DropdownRefs {
 }
 
 const Button: React.StatelessComponent<{}> = R.always(
-  <div className={ styles.button }>Click Me!</div>
+  <div className={ styles.button }>Click me!</div>
 );
 
 const Menu: React.StatelessComponent<{}> = R.always(
