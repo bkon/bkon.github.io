@@ -45,11 +45,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <ul>
 <li>I want a reusable React component which works like an expandable menu button following the
 <a href="https://material.google.com/motion/material-motion.html#material-motion-what-makes-a-good-transition">Google material design guidelines</a></li>
-<li>this component should be flexible enough to allow arbitrary content
-to de displayed inside the button and menu area.</li>
-<li>container size is not known beforehand, as the length of the
-button text and menu context may vary, so straightforward approach
-using CSS animations does not work.</li>
+<li>This component should be flexible enough to allow arbitrary content
+to be displayed inside the button and menu area.</li>
+<li>The container size is not known beforehand, as the length of the
+button text and the height of the menu content may vary, so
+straightforward approach using CSS animations does not work.</li>
 <li><a href="https://github.com/marnusw/react-css-transition-replace">react-css-transition-replace</a>
 cannot be used, as it does not handle container width changes.</li>
 </ul>
@@ -62,14 +62,14 @@ cannot be used, as it does not handle container width changes.</li>
 <h2>Solution</h2>
 
 <p>In order to use CSS transitions, we need to have fixed values for
-container width and height in both states: opened and closed.  &quot;Pure&quot;
+container width and height in both opened and closed states. Pure
 React is not helpful in this case, as it knows nothing about the
 element sizes, but one thing we can do is to get a reference to the
 DOM node after an element has been mounted and access its <code>clientWidth</code>
 and <code>clientHeight</code> properties.</p>
 
 <p>Let&#39;s assume we got these references saved to <code>_button</code> and <code>_menu</code>
-instance attributes of out components. In this case, getting these CSS
+instance attributes of our component. In this case, getting these CSS
 values is as simple as having this method in your component
 definition:</p>
 
@@ -95,9 +95,10 @@ definition:</p>
 <span class="lineno">20</span>   <span class="p">};</span>
 <span class="lineno">21</span> <span class="p">}</span></code></pre></div>
 
-<p>Note the extra condition at lines 4-6. We&#39;re going to use these styles
-in the <code>render</code> method, and this means that it may be called when the
-component is not mounted yet, so refs won&#39;t be available.</p>
+<p><em>Note the extra condition at lines 6-8. We&#39;re going to use these styles
+inside the <code>render</code> method and this means that this code may be
+executed when the component is not mounted yet, so refs won&#39;t be
+available.</em></p>
 
 <p>Next step: let&#39;s use HOC to satisfy the &quot;can render arbitrary content&quot;
 requirement.</p>
@@ -110,7 +111,7 @@ clickable area and the dropdown menu. These two components are
 fully isolated from each other.</p>
 
 <div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="lineno"> 1</span> <span class="kr">const</span> <span class="nx">Button</span><span class="o">:</span> <span class="nx">React</span><span class="p">.</span><span class="nx">StatelessComponent</span><span class="o">&lt;</span><span class="p">{}</span><span class="o">&gt;</span> <span class="o">=</span> <span class="nx">R</span><span class="p">.</span><span class="nx">always</span><span class="p">(</span>
-<span class="lineno"> 2</span>   <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="p">{</span> <span class="nx">styles</span><span class="p">.</span><span class="nx">button</span> <span class="p">}</span><span class="o">&gt;</span><span class="nx">Click</span> <span class="nx">Me</span><span class="o">!&lt;</span><span class="err">/div&gt;</span>
+<span class="lineno"> 2</span>   <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="p">{</span> <span class="nx">styles</span><span class="p">.</span><span class="nx">button</span> <span class="p">}</span><span class="o">&gt;</span><span class="nx">Click</span> <span class="nx">me</span><span class="o">!&lt;</span><span class="err">/div&gt;</span>
 <span class="lineno"> 3</span> <span class="p">);</span>
 <span class="lineno"> 4</span> 
 <span class="lineno"> 5</span> <span class="kr">const</span> <span class="nx">Menu</span><span class="o">:</span> <span class="nx">React</span><span class="p">.</span><span class="nx">StatelessComponent</span><span class="o">&lt;</span><span class="p">{}</span><span class="o">&gt;</span> <span class="o">=</span> <span class="nx">R</span><span class="p">.</span><span class="nx">always</span><span class="p">(</span>
@@ -168,23 +169,29 @@ library.</em></p>
 <span class="lineno">38</span> <span class="p">}</span></code></pre></div>
 
 <p><em>I&#39;ve used <a href="https://github.com/css-modules/css-modules">css-modules</a>
-here. It is not a requirement, normal strings as CSS classe names
-would do, but I do want my CS classes to be unique to reduce blog
-maintenance in future</em></p>
+here. It is not a requirement; normal CSS class names would work, but
+I do want my CS classes to be unique to reduce blog maintenance in
+future.</em></p>
 
-<p>It looks simple, but... doesn&#39;t work yet. If we add some debug logging
-to the <code>render</code> method and <code>ref</code> helper, we would see that <code>render</code> is
-called first, and only after that we get two calls to <code>ref</code>. The
-obvious reason is React requires the component to be rendered to the
-virtual dom before it is mounted to the actual document.</p>
+<p>It looks simple, but... doesn&#39;t work yet. If we check DOM contents in
+developer tools, we&#39;d see that styles on the container <code>div</code> are not
+being set.</p>
 
-<p>If only we could force the update after the component is mounted...</p>
+<p>Time to add some logging to the <code>render</code> method and <code>ref</code>
+helper. After re-running the example the console shows that <code>render</code>
+is called before <code>ref</code>, leaving us with no DOM references. The obvious
+cause is React requires the component to be rendered to the virtual
+dom before it is mounted to the actual document, and there were no
+changes in <code>props</code> or <code>state</code> which would cause React to re-render our
+component after that.</p>
+
+<p>If only we could force the update <em>after</em> the component is mounted&hellip;</p>
 
 <div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="lineno">1</span> <span class="nx">componentDidMount</span><span class="p">()</span><span class="o">:</span> <span class="k">void</span> <span class="p">{</span>
 <span class="lineno">2</span>   <span class="k">this</span><span class="p">.</span><span class="nx">forceUpdate</span><span class="p">();</span>
 <span class="lineno">3</span> <span class="p">}</span></code></pre></div>
 
-<p>... and yes we can.</p>
+<p>&hellip;which is in fact quite easy to do.</p>
 
 <p>Now the only remaining part is to
 <a href="https://github.com/bkon/bkon.github.io/blob/source/src/scss/expandable-dropdown.scss">add some nice styling and actual CSS transitions</a>
