@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
+    {% include gtm_head.html %}
+
     <title>{{ site.title }}</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="description" content="" />
@@ -20,6 +22,7 @@
     {% endif %}
   </head>
   <body id="top">
+    {% include gtm_body.html %}
     <header id="header">
       <a href="/" class="image avatar"><img src="/images/avatar.png" alt="" /></a>
       <h1>{{ site.title }}</h1>

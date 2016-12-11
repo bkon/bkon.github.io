@@ -6,3 +6,4 @@ _site
 /src/css
 /typings
 /_deploy.yml
+/.deploy/
