@@ -1,6 +1,5 @@
 !.gitkeep
 .sass-cache
-_site
 /node_modules/
 /src/js
 /src/css
