@@ -7,7 +7,7 @@ highlighter: pygments
 markdown: redcarpet
 baseurl: "/"
 encoding: "utf-8"
-url: "http://bkon.github.io"
+url: "https://bkon.github.io"
 twitter_username: bkonst
 github_username: bkon
 disqus_username: bkongithub
@@ -27,3 +27,6 @@ defaults:
       path: ""
     values:
       layout: "default"
+
+gems:
+  - jekyll-sitemap
