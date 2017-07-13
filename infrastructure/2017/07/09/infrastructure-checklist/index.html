@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WQF55ML');</script>
+<!-- End Google Tag Manager -->
+
+
+    <title>Bits and pieces</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+
+    <script src="/js/common.js"></script>
+    <script src="/js/init.js"></script>
+    <link rel="stylesheet" href="/css/init.css" />
+
+    
+  </head>
+  <body id="top">
+    <!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WQF55ML"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+    <header id="header">
+      <a href="/" class="image avatar"><img src="/images/avatar.png" alt="" /></a>
+      <h1>Bits and pieces</h1>
+    </header>
+
+    <div id="main">
+    <article>
+        <header class="major">
+            <h2 class="post-title">Ivory tower infrastructure checklist</h2>
+                <p class="post-meta">Jul 9, 2017</p>
+        </header>
+
+        <section>
+            <h2>Change management</h2>
+
+<ul>
+<li>All infrastructure changes are tracked in the version control
+system</li>
+<li>IAM changes are tracked in the version control system</li>
+</ul>
+
+<h2>Continuous deployment</h2>
+
+<ul>
+<li>Keys used for infrastructure change deployments are limited to
+the single stack we&#39;re depoying to</li>
+<li>All services are deployed as binary artifacts</li>
+<li>All binary artifacts are versioned (and history of several most
+recent versions is kept accessible)</li>
+<li>CI does not have access to IAM</li>
+</ul>
+
+<h2>Protocols / network</h2>
+
+<ul>
+<li>Web / API instances are available through HTTP(s)</li>
+<li>NTP works on your instances (ingress UDP 123)</li>
+<li>LB instances have ALB ingress ports (31000 - 61000) open</li>
+<li>LB has incoming HTTPS open</li>
+<li>LB does not have incoming HTTP (serious, why should it?)</li>
+<li>Cache is accessible from your app / web instances</li>
+<li>DB is accessible from your app / web instances</li>
+<li>Instances have inbound ephemeral ports (1024-65535) allows on
+stateless firewall (EC2::NetworkAclEntry)</li>
+</ul>
+
+<h2>Organizational structure</h2>
+
+<ul>
+<li>Staging / testing and production accounts are physically separate</li>
+<li>Relationships between accounts are configured through AWS Organizations</li>
+<li>There&#39;s no duplication across accounts; users can assume roles to access
+child AWS accounts.</li>
+</ul>
+
+<h2>Staging environments</h2>
+
+<ul>
+<li>Data in my staging environment is anonymized</li>
+<li>Data is my staging environment is up to date with or
+at least closely resembles production data</li>
+<li>Data in the staging environment is update automatically</li>
+</ul>
+
+<h2>Route 53</h2>
+
+<ul>
+<li>each environment has a CloudFormation-managed Route53 record (or several)
+pointing to this environment;</li>
+<li>Production DNS records is a CNAME for the environment-specific domain;</li>
+<li>Applicaton does not listen on the domain apex;</li>
+<li>Apex domain is mapped to S3 website redirect to the application domain.</li>
+</ul>
+
+<h2>Edge services</h2>
+
+<ul>
+<li>Production environment is completely hidden behind an edge service (CloudFront)</li>
+<li>Static assets are served directly from S3 origin with aggressive caching;</li>
+<li>All CloudFront distributions have a CNAME in Route53; application
+does not generate links pointing directly to the cloufront domain.</li>
+</ul>
+
+<h2>Load balancers</h2>
+
+<ul>
+<li>Unhealthy thresholds are sufficient to allow slow application start-up time</li>
+</ul>
+
+<h2>Disaster recovery</h2>
+
+<ul>
+<li>RDS instances use multi-AZ deployments with standby replicas</li>
+<li>Worker / web services use multi-AZ deployments</li>
+<li>RDS instances have automated snapshots enabled with enough retention time</li>
+<li>Critical assets on S3 have versioning / lifecycle rules</li>
+<li>CloudFormation resources related to data storage are protected from
+replacement and deletion with stack policies</li>
+<li>I can create a new environment from scratch in automated fashion</li>
+</ul>
+
+<h2>Security</h2>
+
+<ul>
+<li>Database instances are locked inside a private subnet</li>
+<li>Cache instances are locked inside a private subnet</li>
+<li>Internal API instances are not publicly accessible</li>
+<li>Instances behind LBs are accessible to these LBs only</li>
+<li>There&#39;s no SSH access to my production EC2 instances</li>
+<li>Production environment account is completely locked up or
+has a minimal number of users who <em>need</em> to access it.</li>
+<li>Data in S3 buckets is private by default; publicly available resources
+need to be explicitly marked as such.</li>
+<li>Sensitive data (e.g. environment parameters) is encrypted at rest</li>
+</ul>
+
+<h2>Alerts and triage</h2>
+
+<ul>
+<li>All application logs are collected to centralized storage</li>
+<li>All EC2 instance logs are collected to centralized storage</li>
+<li>All services will scale automatically if number of healthy hosts drops
+below norm</li>
+<li>Queue workers will scale automatically if number of pending items in the
+queue grows above a certain number</li>
+<li>An email notification is sent if any service has low amount of healhy hosts
+longer than a few minutes</li>
+<li>An email notification is sent if the number of pending items in the queue
+stays high for long</li>
+</ul>
+
+<h2>ECS</h2>
+
+<ul>
+<li>ECS tasks are distributed across instances / availability zones</li>
+</ul>
+
+        </section>
+
+        <footer>
+            <div class="row">
+            
+
+                <article class="6u 12u(small) excerpt">
+                    <header>
+                        <h2><a href="/client/2016/12/01/using-refs-in-react/">Smooth transitions with refs in React.js</a></h2>
+                    </header>
+                    <section>
+                        <p>Let's use React refs to build an animated dropdown
+button component which follows Google material design guidelines.</p>
+
+                    </section>
+                    <footer>
+                        <ul class="actions">
+                            <li><a href="/client/2016/12/01/using-refs-in-react/" class="button">Read More</a></li>
+                        </ul>
+                    </footer>
+                </article>
+            
+
+            
+
+                <article class="6u$ 12u(small) excerpt f-right">
+                    <header>
+                        <h2><a href="/client/2017/07/13/typos-in-redux-actions-the-easy-way/">Detecting typos in redux action names - the easy way</a></h2>
+                    </header>
+                    <section>
+                        <p>Preventing one of the most annoying problems with Redux &mdash;
+typos in action names causing your reducer branch to be ignored.</p>
+
+                    </section>
+                    <footer>
+                        <ul class="actions">
+                            <li><a href="/client/2017/07/13/typos-in-redux-actions-the-easy-way/" class="button">Read More</a></li>
+                        </ul>
+                    </footer>
+                </article>
+            
+            </div>
+        </footer>
+
+    </article>
+
+</div>
+
+
+    <!-- Footer -->
+    <footer id="footer">
+      <ul class="icons">
+
+        
+        <li>
+        <a href="https://github.com/bkon" class="icon fa-github">
+          <span class="label">GitHub</span>
+        </a>
+        </li>
+        
+
+        
+        <li>
+        <a href="https://twitter.com/bkonst" class="icon fa-twitter">
+          <span class="label">Twitter</span>
+        </a>
+        </li>
+        
+
+        
+        <li>
+        <a href="https://linkedin.com/in/konstantin-burnaev" class="icon fa-linkedin">
+          <span class="label">LinkedIn</span>
+        </a>
+        </li>
+        
+
+        
+        <li>
+        <a href="mailto:kbourn@gmail.com" class="icon fa-envelope-o">
+          <span class="label">Email</span>
+        </a>
+        </li>
+        
+      </ul>
+      <ul class="copyright">
+        <li>&copy; Konstantin Burnaev 2016</li>
+      </ul>
+    </footer>
+
+    
+  </body>
+</html>

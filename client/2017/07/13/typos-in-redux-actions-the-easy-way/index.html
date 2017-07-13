@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WQF55ML');</script>
+<!-- End Google Tag Manager -->
+
+
+    <title>Bits and pieces</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+
+    <script src="/js/common.js"></script>
+    <script src="/js/init.js"></script>
+    <link rel="stylesheet" href="/css/init.css" />
+
+    
+  </head>
+  <body id="top">
+    <!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WQF55ML"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+    <header id="header">
+      <a href="/" class="image avatar"><img src="/images/avatar.png" alt="" /></a>
+      <h1>Bits and pieces</h1>
+    </header>
+
+    <div id="main">
+    <article>
+        <header class="major">
+            <h2 class="post-title">Detecting typos in redux action names - the easy way</h2>
+                <p class="post-meta">Jul 13, 2017</p>
+        </header>
+
+        <section>
+            <h2>Challenge</h2>
+
+<p><a href="https://reactjsnews.com/proxies-with-redux-types">Using Proxies with Redux Types</a> describes
+a smart way of using ES2015 language feature to prevent us from
+accidentally importing a non-existent action name and attempting to
+use it in your Redux reducer.</p>
+
+<p>I&#39;d like to look at the problem from another side, asking myself two questions:</p>
+
+<ul>
+<li>Is there a valid case when application needs to access a
+non-existent export in the production environment?</li>
+<li>Can we competely prevent this from happening even before application is run?</li>
+</ul>
+
+<h2>Example</h2>
+
+<h3><code>types.js</code></h3>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="lineno">1 </span><span class="kr">const</span> <span class="nx">types</span> <span class="o">=</span> <span class="p">{</span>
+<span class="lineno">2 </span>  <span class="nx">FETCH_FILE_REQUEST</span><span class="o">:</span> <span class="s1">&#39;fetch_file_request&#39;</span><span class="p">,</span>
+<span class="lineno">3 </span>  <span class="nx">FETCH_FILE_SUCCESS</span><span class="o">:</span> <span class="s1">&#39;fetch_file_success&#39;</span><span class="p">,</span>
+<span class="lineno">4 </span>  <span class="nx">FETCH_FILE_FAIL</span><span class="o">:</span> <span class="s1">&#39;fetch_file_fail&#39;</span>
+<span class="lineno">5 </span><span class="p">}</span>
+<span class="lineno">6 </span>
+<span class="lineno">7 </span><span class="kr">export</span> <span class="k">default</span> <span class="nx">types</span><span class="p">;</span></code></pre></figure>
+
+<h3><code>consumer.js</code></h3>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span><span class="lineno"> 1 </span><span class="kr">import</span> <span class="p">{</span>
+<span class="lineno"> 2 </span>  <span class="nx">FETCH_FILE_REQUEST</span><span class="p">,</span>
+<span class="lineno"> 3 </span>  <span class="nx">FETCH_FILE_SUCESS</span><span class="p">,</span>
+<span class="lineno"> 4 </span>  <span class="nx">FETCH_FILE_FAIL</span>
+<span class="lineno"> 5 </span><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;./types&#39;</span><span class="p">;</span>
+<span class="lineno"> 6 </span>
+<span class="lineno"> 7 </span><span class="kr">const</span> <span class="nx">filesReducer</span> <span class="o">=</span> <span class="p">(</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{},</span> <span class="nx">action</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="lineno"> 8 </span>  <span class="k">switch</span> <span class="p">(</span><span class="nx">action</span><span class="p">.</span><span class="nx">type</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno"> 9 </span>    <span class="k">case</span> <span class="nx">FETCH_FILE_SUCESS</span><span class="o">:</span>
+<span class="lineno">10 </span>      <span class="k">return</span> <span class="p">{</span> <span class="p">...</span><span class="nx">state</span><span class="p">,</span> <span class="nx">file</span><span class="o">:</span> <span class="nx">action</span><span class="p">.</span><span class="nx">payload</span> <span class="p">};</span>
+<span class="lineno">11 </span>    <span class="k">default</span><span class="o">:</span>
+<span class="lineno">12 </span>      <span class="k">return</span> <span class="nx">state</span><span class="p">;</span>
+<span class="lineno">13 </span>  <span class="p">}</span>
+<span class="lineno">14 </span><span class="p">}</span></code></pre></figure>
+
+<h2>Solution</h2>
+
+<p>In general, JS made a giant step towards allowing static source
+analysis recently, Typescript and flow annotations being a good
+example of this. When I face the problem similar to one described
+above, it feels like a job for those tools - solution which deals with
+errors on application level works, but it produces a runtime
+error. Let&#39;s make our build fail instead.</p>
+
+<p>Now, I presume you already using <code>eslint</code>. You really should be.  One
+of the awesome features of it is it has may plugins which would
+analyze the code for you. And guess what? There&#39;s one which does
+exactly what we need (and much more), saving a lot of headache
+debugging mysterious application problems:
+<a href="https://www.npmjs.com/package/eslint-plugin-import">eslint-plugin-import</a></p>
+
+<p>Let&#39;s start with adding this tool:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>yarn add eslint eslint-plugin-import
+</code></pre></div>
+<p>... and configuring it by putting the following to .eslintrc:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>extends:
+  - eslint:recommended
+  - plugin:import/errors
+  - plugin:import/warnings
+
+parserOptions:
+  sourceType: module
+  ecmaVersion: 6
+  ecmaFeatures:
+    experimentalObjectRestSpread: true
+</code></pre></div>
+<p>Now, let&#39;s see what it does:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"><span></span>&gt; ./node_modules/.bin/eslint consumer.js
+
+./consumer.js
+  3:3  error  FETCH_FILE_SUCESS not found in &#39;./types&#39;           import/named
+  4:3  error  &#39;FETCH_FILE_FAIL&#39; is defined but never used        no-unused-vars
+  7:7  error  &#39;filesReducer&#39; is assigned a value but never used  no-unused-vars
+</code></pre></div>
+<p>... and that&#39;s exactly what we wanted. Add <code>eslint</code> to your testing
+pipeline, enable IDE integrations and you&#39;ll be seeing these bugs
+immediately as they appear.</p>
+
+        </section>
+
+        <footer>
+            <div class="row">
+            
+
+                <article class="6u 12u(small) excerpt">
+                    <header>
+                        <h2><a href="/infrastructure/2017/07/09/infrastructure-checklist/">Ivory tower infrastructure checklist</a></h2>
+                    </header>
+                    <section>
+                        <p>A long list of questions to ask yourself when architecting
+an AWS cloud solution.</p>
+
+                    </section>
+                    <footer>
+                        <ul class="actions">
+                            <li><a href="/infrastructure/2017/07/09/infrastructure-checklist/" class="button">Read More</a></li>
+                        </ul>
+                    </footer>
+                </article>
+            
+
+            
+            </div>
+        </footer>
+
+    </article>
+
+</div>
+
+
+    <!-- Footer -->
+    <footer id="footer">
+      <ul class="icons">
+
+        
+        <li>
+        <a href="https://github.com/bkon" class="icon fa-github">
+          <span class="label">GitHub</span>
+        </a>
+        </li>
+        
+
+        
+        <li>
+        <a href="https://twitter.com/bkonst" class="icon fa-twitter">
+          <span class="label">Twitter</span>
+        </a>
+        </li>
+        
+
+        
+        <li>
+        <a href="https://linkedin.com/in/konstantin-burnaev" class="icon fa-linkedin">
+          <span class="label">LinkedIn</span>
+        </a>
+        </li>
+        
+
+        
+        <li>
+        <a href="mailto:kbourn@gmail.com" class="icon fa-envelope-o">
+          <span class="label">Email</span>
+        </a>
+        </li>
+        
+      </ul>
+      <ul class="copyright">
+        <li>&copy; Konstantin Burnaev 2016</li>
+      </ul>
+    </footer>
+
+    
+  </body>
+</html>

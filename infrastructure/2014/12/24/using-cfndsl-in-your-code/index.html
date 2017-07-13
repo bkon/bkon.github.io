@@ -49,17 +49,17 @@ make it more friendly to the developers and tester&#39;s eye?</p>
 
 <p>And the answer is, obviously, &quot;yes, we can!&quot;</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">json</span> <span class="o">=</span> <span class="no">CfnDsl</span><span class="o">::</span><span class="n">eval_file_with_extras</span><span class="p">(</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="n">json</span> <span class="o">=</span> <span class="no">CfnDsl</span><span class="o">::</span><span class="n">eval_file_with_extras</span><span class="p">(</span>
   <span class="n">filename</span>
-<span class="p">)</span><span class="o">.</span><span class="n">to_json</span></code></pre></div>
+<span class="p">)</span><span class="o">.</span><span class="n">to_json</span></code></pre></figure>
 
 <p>Too simple? Ok, if you want a bit more complicated code:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">json</span> <span class="o">=</span> <span class="no">CfnDsl</span><span class="o">::</span><span class="n">eval_file_with_extras</span><span class="p">(</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="n">json</span> <span class="o">=</span> <span class="no">CfnDsl</span><span class="o">::</span><span class="n">eval_file_with_extras</span><span class="p">(</span>
   <span class="n">filename</span><span class="p">,</span>
   <span class="o">[[</span><span class="ss">:ruby</span><span class="p">,</span> <span class="s2">&quot;vars.rb&quot;</span><span class="o">]]</span><span class="p">,</span>
   <span class="no">STDERR</span>
-<span class="p">)</span><span class="o">.</span><span class="n">to_json</span></code></pre></div>
+<span class="p">)</span><span class="o">.</span><span class="n">to_json</span></code></pre></figure>
 
 <p>What about those two mysterious parameters <code>[[:ruby, &quot;vars.rb&quot;]]</code>
 and <code>STDERR</code>?</p>
@@ -75,9 +75,9 @@ disabled.</p>
 file.  What if you just want to embed the template to your source code
 directly for whatever reason?  Fear not - it makes things even easier!</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">CloudFormation</span> <span class="k">do</span>
-  <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="n">your</span> <span class="n">stack</span> <span class="n">contents</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-<span class="k">end</span><span class="o">.</span><span class="n">to_json</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span></span><span class="no">CloudFormation</span> <span class="k">do</span>
+  <span class="o">...</span> <span class="n">your</span> <span class="n">stack</span> <span class="n">contents</span> <span class="o">...</span>
+<span class="k">end</span><span class="o">.</span><span class="n">to_json</span></code></pre></figure>
 
 <p>Good luck with your stacks!</p>
 
