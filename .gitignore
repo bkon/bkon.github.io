@@ -5,5 +5,4 @@ _site
 /src/js
 /src/css
 /typings
-/_deploy.yml
 /.deploy/

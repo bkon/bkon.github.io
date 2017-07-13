@@ -30,3 +30,4 @@ defaults:
 
 gems:
   - jekyll-sitemap
+  - jekyll-paginate
