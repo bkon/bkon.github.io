@@ -1,6 +1,5 @@
 const webpack = require("webpack");
 const path = require("path");
-const ChunkManifestPlugin = require("chunk-manifest-webpack-plugin");
 
 const UGLIFY_OPTIONS = {
   compress: {
@@ -21,14 +20,13 @@ module.exports = {
   externals: {},
 
   resolve: {
-    root: [
+    modules: [
       path.join(__dirname, "jsx"),
       path.join(__dirname, "scss"),
       path.join(__dirname, "../node_modules")
     ],
 
     extensions: [
-      "",
       ".js",
       ".jsx",
       ".ts",
@@ -68,15 +66,17 @@ module.exports = {
         "NODE_ENV": "\"production\""
       }
     }),
-    new webpack.optimize.CommonsChunkPlugin("common", "common.js"),
-    new webpack.optimize.UglifyJsPlugin(UGLIFY_OPTIONS),
-    new webpack.optimize.OccurenceOrderPlugin()
+    new webpack.optimize.CommonsChunkPlugin({
+      name: "common",
+      filename: "common.js"
+    }),
+    new webpack.optimize.UglifyJsPlugin(UGLIFY_OPTIONS)
   ],
 
   output: {
     filename: "[name].js",
     chunkFilename: "[name].js",
-    path: "src/js",
+    path: path.join(__dirname, "js"),
     publicPath: "/assets/"
   }
 };

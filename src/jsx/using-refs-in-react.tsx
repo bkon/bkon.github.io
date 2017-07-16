@@ -12,7 +12,7 @@ import {
 } from "react";
 import * as ReactDOM from "react-dom";
 import { compose, withState, withProps } from "recompose";
-import * as enhanceWithClickOutside from "react-onclickoutside";
+import enhanceWithClickOutside from "react-onclickoutside";
 
 const styles: any = require("../scss/expandable-dropdown.scss");
 
