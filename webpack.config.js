@@ -14,7 +14,8 @@ module.exports = {
 
   entry: {
     "init": "init",
-    "using-refs-in-react": "using-refs-in-react"
+    "using-refs-in-react": "using-refs-in-react",
+    "dealing-with-jarred-animation-in-react": "dealing-with-jarred-animation-in-react"
   },
 
   externals: {},
